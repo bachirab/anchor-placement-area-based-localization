@@ -52,7 +52,7 @@ initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
 
 n1 = neighbor((3255, 0))
 print(n1)
-drawNetwork(initial, algo_="initial")
+drawNetwork([(3255, 0)], algo_="initial")
 drawNetwork(n1, algo_="n1")
 
 

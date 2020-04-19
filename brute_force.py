@@ -22,7 +22,7 @@ print("tics=" + str(tics) + " anchors=" + str(nb_anchors))
 
 # Param
 
-minAvgRA = 999999999
+minAvgRA = 9999999999
 
 positions = []
 for i in range(max_x // tics):
