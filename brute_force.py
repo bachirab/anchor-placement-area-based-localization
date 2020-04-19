@@ -31,15 +31,15 @@ for i in range(max_x // tics):
 anchors_list = list(combinations(positions, nb_anchors))
 
 start = time.time()
-for index, nb_anchors in enumerate(tqdm(anchors_list)):
-    l = getAllSubRegions(anchors_=nb_anchors, max_x_=max_x, max_y_=max_y)
+for index, anchors in enumerate(tqdm(anchors_list)):
+    l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)
     if avgRA != 0:
         if minAvgRA > avgRA:
             minAvgRA = avgRA
             optimal_anchors = []
-            for a in nb_anchors:
+            for a in anchors:
                 optimal_anchors.append(a)
             optimal_areas = res
 end = time.time()
