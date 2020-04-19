@@ -22,7 +22,7 @@ print("tics=" + str(tics) + " anchors=" + str(nb_anchors))
 
 # Param
 
-def neighbor(point):
+def neighbor(point, step_=2):
     """ Function return the neighbors of a point x in the matrix A
     take as input the coordinate of x and dim the dimension of A then
     returns the neighbors of x in the matrix B which have 2*dim elements.
@@ -31,7 +31,7 @@ def neighbor(point):
     returns : [[3, 1], [3, 2], [3, 3], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3]]
     """
     a = np.array(point)
-    epsilon = tics * 1
+    epsilon = tics * step_
     adjacents = []
     for i in range(a[0] - epsilon, a[0] + epsilon + 1, tics):
         if 0 <= i < max_x - 1:
