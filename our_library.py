@@ -20,9 +20,9 @@ shapely.speedups.enable()
 
 
 PRECISION = 5
-MAX_X = 4*7#*15*31
-MAX_Y = 4*7#*15*31
-TICS = 7#*15*31
+MAX_X = 4*7*15*31
+MAX_Y = 4*7*15*31
+TICS = 7*15*31
 #TICS = 4*7*31
 NB_ANCHORS = 3
 
