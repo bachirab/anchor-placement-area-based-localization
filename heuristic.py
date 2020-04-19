@@ -52,8 +52,8 @@ initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
 
 n1 = neighbor((3255, 0))
 print(n1)
-drawNetwork([(3255, 0)], algo_="initial")
-drawNetwork(n1, algo_="n1")
+drawNetwork([(3255, 0)], algo_="initial", mode_="show")
+drawNetwork(n1, algo_="n1", mode_="show")
 
 
 # for choice in [7]:#,15,31]:
