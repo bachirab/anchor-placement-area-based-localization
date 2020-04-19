@@ -19,7 +19,7 @@ shapely.speedups.enable()
 PRECISION = 5
 
 #this is a github test
-#This is my test
+#This is my test t
 MAX_X = 4*7*15*31
 MAX_Y = 4*7*15*31
 TICS = 7*15*31
