@@ -15,15 +15,25 @@ shapely.speedups.enable()
 import time
 from our_library import *
 from shapely.wkt import loads, dumps
+import argparse, sys
+
+parser=argparse.ArgumentParser()
+parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
+parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y)
+parser.add_argument('--tics', help='Give the TICS value', default=TICS)
+parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS)
+
+args=parser.parse_args()
+
+max_x = args.max_x
+max_y = args.max_y
+tics = args.tics
+anchors = args.anchors
+
+print("tics=" + str(tics) + " anchors=" + str(anchors))
 
 # MAX_X = 4 * 7  *15 *31
 # MAX_Y = 4 * 7 *15 *31
-
-if len(sys.argv) == 3:
-    TICS = eval(sys.argv[1])
-    NB_ANCHORS = eval(sys.argv[2])
-
-
 # Param
 
 
