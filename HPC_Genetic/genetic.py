@@ -18,28 +18,22 @@ import time
 from copy import deepcopy
 import random
 from our_library import *
+import argparse, sys
 
+parser=argparse.ArgumentParser()
+parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
+parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y)
+parser.add_argument('--tics', help='Give the TICS value', default=TICS)
+parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS)
 
-# our_library.TICS = eval(sys.argv[1])
-# our_library.NB_ANCHORS = eval(sys.argv[2])
-# our_library.MAX_X = 4 * 7 #  *15#*31
-# our_library.MAX_Y = 4 * 7# *15#*31
-#
-# our_library.max_x_= 4 * 7 #  *15#*31
-# our_library.max_y_= 4 * 7# *15#*31
-# our_library.nb_anchors_= our_library.NB_ANCHORS
-# our_library.tics_= our_library.TICS
-#
-# MAX_X = our_library.max_x_
-# MAX_Y = our_library.max_y_
-# NB_ANCHORS = our_library.nb_anchors_
-# TICS = our_library.tics_
+args=parser.parse_args()
 
-if len(sys.argv)==3:
-    TICS = eval(sys.argv[1])
-    NB_ANCHORS = eval(sys.argv[2])
+max_x = args.max_x
+max_y = args.max_y
+tics = args.tics
+anchors = args.anchors
 
-
+print("tics=" + str(tics) + " anchors=" + str(anchors))
 #TICS = 7  # *15#*31
 
 
