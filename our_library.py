@@ -43,7 +43,7 @@ def minMax(a, b):
             return res
 
 
-def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb_anchors_=NB_ANCHORS, tics_=TICS):
+def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb_anchors_=NB_ANCHORS, tics_=TICS, algo_="zzz"):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     e = plt.Rectangle((0, 0), max_x_ - 1, max_y_ - 1, facecolor='w', edgecolor='black', linewidth=2.0)
@@ -79,8 +79,7 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
         plt.plot(n.x, n.y, '^', color='b')
     ax.grid(which='both')
     # plt.show()
-    plt.savefig('./IMG/' + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_),
-                bbox_inches='tight')
+    plt.savefig('./IMG/' + str(algo_) + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_), bbox_inches='tight')
 
 
 def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):

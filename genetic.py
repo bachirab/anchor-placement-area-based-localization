@@ -8,17 +8,14 @@ Original file is located at
     https://colab.research.google.com/drive/1LAKWgnGOdLtdwpJJtZLdvNEeXuwQduq0
 """
 
-import sys
-
 from multiprocessing import Process, Queue, cpu_count
 from sys import stdout
 from random import random
-import numpy as np
 import time
 from copy import deepcopy
 import random
 from our_library import *
-import argparse, sys
+import argparse
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
@@ -32,9 +29,6 @@ max_x = args.max_x
 max_y = args.max_y
 tics = args.tics
 anchors = args.anchors
-
-print("tics=" + str(tics) + " anchors=" + str(anchors))
-#TICS = 7  # *15#*31
 
 
 """This next part is the Brute Force method
