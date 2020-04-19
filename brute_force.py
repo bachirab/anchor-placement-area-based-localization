@@ -7,21 +7,22 @@ Original file is located at
     https://colab.research.google.com/drive/1WQOtFBJtH3RGjs-_INtIOfE4vv5LQ0gs
 """
 
-from sys import stdout
-from shapely.geometry import Point, MultiPolygon, Polygon
-from random import random
-from numpy import *
-import numpy as np
-from itertools import combinations
+import argparse
 import matplotlib.pyplot as plt
-from descartes import PolygonPatch
+import numpy as np
 import shapely.speedups
 import sys
-shapely.speedups.enable()
-import argparse, sys
 import time
+from descartes import PolygonPatch
+from itertools import combinations
+from numpy import *
 from our_library import *
+from random import random
+from shapely.geometry import Point, MultiPolygon, Polygon
 from shapely.wkt import loads, dumps
+# from sys import stdout
+
+shapely.speedups.enable()
 
 parser=argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
@@ -52,8 +53,8 @@ start = time.time()
 #anchors_list = [[(7, 0), (7, 21), (21, 7), (21, 14)]]
 for index, anchors in enumerate(anchors_list):
  print(index,'/',len(anchors_list))
-# stdout.write("\r%s/%d" % (color(index, len(anchors_list)), len(anchors_list)))
-# stdout.flush()
+# sys.stdout.write("\r%s/%d" % (color(index, len(anchors_list)), len(anchors_list)))
+# sys.stdout.flush()
  l = getAllSubRegions(anchors,max_x,max_y)
  res = getDisjointSubRegions(l)
  avgRA = getExpectation(res)
