@@ -17,13 +17,10 @@ import shapely.speedups
 from shapely.wkt import loads, dumps
 shapely.speedups.enable()
 PRECISION = 5
-
-
 MAX_X = 4*7*15*31
 MAX_Y = 4*7*15*31
 TICS = 7*15*31
-TICS = 4*7*31
-
+#TICS = 4*7*31
 NB_ANCHORS = 3
 
 
@@ -95,7 +92,8 @@ def getAllSubRegions(anchors, max_x_=MAX_X, max_y_=MAX_Y):
         for x in res:
             x = fix_shape(x)
             area_list.append(x)
-            drawNetwork(anchors, [rest_of_area,x])
+            drawNetwork(anchors, [x])
+            drawNetwork(anchors, [rest_of_area])
             rest_of_area = rest_of_area.difference(x)
     area_list.append(rest_of_area)
     return area_list

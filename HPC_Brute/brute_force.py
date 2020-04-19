@@ -18,26 +18,35 @@ from descartes import PolygonPatch
 import shapely.speedups
 import sys
 shapely.speedups.enable()
+import argparse, sys
 import time
 from our_library import *
 from shapely.wkt import loads, dumps
 
-#MAX_X = 4 * 7  *15 *31
-#MAX_Y = 4 * 7 *15 *31
+parser=argparse.ArgumentParser()
+parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
+parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y)
+parser.add_argument('--tics', help='Give the TICS value', default=TICS)
+parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS)
 
-if len(sys.argv)==3:
-    TICS = eval(sys.argv[1])
-    NB_ANCHORS = eval(sys.argv[2])
+args=parser.parse_args()
+
+max_x = args.max_x
+max_y = args.max_y
+tics = args.tics
+anchors = args.anchors
+
+print("tics=" + str(tics) + " anchors=" + str(anchors))
 
 # Param
 
 minAvgRA = 999999999
 
 positions = []
-for i in range(MAX_X // TICS):
-    for j in range(MAX_Y // TICS):
-        positions.append((i * TICS, j * TICS))
-anchors_list = list(combinations(positions, NB_ANCHORS))
+for i in range(max_x // tics):
+    for j in range(max_y // tics):
+        positions.append((i * tics, j * tics))
+anchors_list = list(combinations(positions, anchors))
 
 start = time.time()
 #anchors_list = [[(7, 0), (7, 21), (21, 7), (21, 14)]]
@@ -62,5 +71,5 @@ print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
 print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
 f_res = open('./IMG/brute.txt', 'a')
-f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(NB_ANCHORS)+';'+str(TICS)+'\n')
+f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(anchors)+';'+str(tics)+'\n')
 f_res.close()
