@@ -205,7 +205,7 @@ class GA(object):
 
 def Work(anchors):
     
-    l = getAllSubRegions(anchors)
+    l = getAllSubRegions(anchors,max_x,max_y)
     #print(anchors)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)

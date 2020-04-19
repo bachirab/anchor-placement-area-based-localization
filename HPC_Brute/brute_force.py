@@ -54,7 +54,7 @@ for index, anchors in enumerate(anchors_list):
  print(index,'/',len(anchors_list))
 # stdout.write("\r%s/%d" % (color(index, len(anchors_list)), len(anchors_list)))
 # stdout.flush()
- l = getAllSubRegions(anchors)
+ l = getAllSubRegions(anchors,max_x,max_y)
  res = getDisjointSubRegions(l)
  avgRA = getExpectation(res)
  if avgRA != 0:

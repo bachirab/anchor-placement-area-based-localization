@@ -88,7 +88,7 @@ def getAllSubRegions(anchors, max_x_=MAX_X, max_y_=MAX_Y):
     for a1, a2 in list(combinations(anchors, 2)):
         a1 = Point(a1[0], a1[1])
         a2 = Point(a2[0], a2[1])
-        res = get2anchorsHslRegions(a1, a2)
+        res = get2anchorsHslRegions(a1, a2,max_x_,max_y_)
         for x in res:
             x = fix_shape(x)
             area_list.append(x)

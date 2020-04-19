@@ -32,12 +32,10 @@ anchors = args.anchors
 
 print("tics=" + str(tics) + " anchors=" + str(anchors))
 
-# MAX_X = 4 * 7  *15 *31
-# MAX_Y = 4 * 7 *15 *31
 # Param
 
 
-def neighboor(point,tics):
+def neighboor(point):
     """ Function return the neighboors of a point x in the matrix A
     take as input the coordinate of x and dim the dimension of A then
     returns the neighboors of x in the matrix B which have 2*dim elements.
@@ -48,9 +46,9 @@ def neighboor(point,tics):
     a = np.array(point)
     epsilon = tics*2
     adjacents = []
-    for i in range(a[0]-epsilon,a[0]+epsilon+1,TICS):
+    for i in range(a[0]-epsilon,a[0]+epsilon+1,tics):
         if i>=0 and i<MAX_X-1:
-            for j in range(a[1]-epsilon,a[1]+epsilon+1,TICS):
+            for j in range(a[1]-epsilon,a[1]+epsilon+1,tics):
                 if j>=0 and j<MAX_X-1:
                     adjacents.append([i,j])
     return adjacents
@@ -58,20 +56,12 @@ def neighboor(point,tics):
 
 # Param
 NB_ANCHORS = 3 #<---- please change this wen updating the number of anchors
-MAX_X = 4*7*15*31
-MAX_Y = 4*7*15*31
-TICS = 7*15*31
-minAvgRA = 999999999
+inAvgRA = 999999999
 positions = []
 dictionnaire = []
 indice = 0
 duration = 0
 
-
-#NB_ANCHORS = 3
-#MAX_X = 4*7#*15*31
-#MAX_Y = 4*7#*15*31
-#TICS = 7#*15*31
 
 # For every number of anchors, we need to initialise the initial vector which gives the optimal
 # anchor placement for the low discretisation.
@@ -85,12 +75,10 @@ print(neighboor([7,7],15*31))
 #for choice in [7]:#,15,31]:
 choice = 7
 start = time.time()
-#TICS = 4*7*15*31 // choice
-TICS = 7*15*31 // choice
+tics = 7*15*tics // choice
 optimal_anchors = []
 anchors_list = []
-initial = [(x//TICS,y//TICS) for x,y in initial]
-listneighboors = [neighboor(x,TICS) for x in initial]
+listneighboors = [neighboor(x) for x in initial]
 print(len(listneighboors))
 for items in itertools.product(*listneighboors):
     anchors_list.append(items)
@@ -98,7 +86,7 @@ print(len(anchors_list))
 for index,anchors in enumerate(anchors_list):
     stdout.write("\r%s/%d" % (color(index,len(anchors_list)), len(anchors_list)) )
     stdout.flush()
-    l = getAllSubRegions(anchors)
+    l = getAllSubRegions(anchors,max_x,max_y)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)
     if avgRA != 0:
@@ -109,10 +97,8 @@ for index,anchors in enumerate(anchors_list):
             optimal_anchors.append(a)
         optimal_areas = res
 end = time.time()
-duration += round((end - start) / 60.0, 2)
-drawNetwork(optimal_anchors,optimal_areas)
-results.append(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(duration)+';'+str(NB_ANCHORS)+';'+str(TICS))
-initial = deepcopy(optimal_anchors)
+
+duration = end - start
 
 print("**Optimal Anchor Pos.:"+str(optimal_anchors), minAvgRA)
 print('Runinig Times : '+str(round((end - start) / 60.0, 2)) +' (min.)')
@@ -122,7 +108,7 @@ for line in results:
     fres.write(line+'\n')
 
 f_res = open('./IMG/heuristic.txt', 'a')
-f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(NB_ANCHORS)+';'+str(TICS)+'\n')
+f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(NB_ANCHORS)+';'+str(tics)+'\n')
 f_res.close()
 
 ##TODO The initial point is from brute force, I find it by multiplying it with the TICS.
