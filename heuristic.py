@@ -31,7 +31,7 @@ def neighbor(point):
     returns : [[3, 1], [3, 2], [3, 3], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3]]
     """
     a = np.array(point)
-    epsilon = tics * 2
+    epsilon = tics * 1
     adjacents = []
     for i in range(a[0] - epsilon, a[0] + epsilon + 1, tics):
         if 0 <= i < max_x - 1:
@@ -50,10 +50,11 @@ initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
 # Remember that [(3255, 0), (3255, 9765), (9765, 6510)] = [(7,0),(7,21),(21,14)]
 # initial = [(6510, 3255), (6510, 9765), (9765, 0), (9765, 9765)] #4 anchors 4*4
 
-n1 = neighbor((3255, 0))
-print(n1)
-drawNetwork([(3255, 0)], algo_="initial", mode_="show")
-drawNetwork(n1, algo_="n1", mode_="show")
+n0 = (0, 0)
+#drawNetwork([initial[2]], algo_="initial", mode_="show")
+#drawNetwork(neighbor(initial[2]), algo_="n1", mode_="show")
+drawNetwork([n0], algo_="initial", mode_="show")
+drawNetwork(neighbor(n0), algo_="n1", mode_="show")
 
 
 # for choice in [7]:#,15,31]:
