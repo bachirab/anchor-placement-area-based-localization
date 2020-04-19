@@ -15,11 +15,14 @@ import matplotlib.pyplot as plt
 from descartes import PolygonPatch
 import shapely.speedups
 from shapely.wkt import loads, dumps
+from tqdm import tqdm
 shapely.speedups.enable()
+
+
 PRECISION = 5
-MAX_X = 4*7*15*31
-MAX_Y = 4*7*15*31
-TICS = 7*15*31
+MAX_X = 4*7#*15*31
+MAX_Y = 4*7#*15*31
+TICS = 7#*15*31
 #TICS = 4*7*31
 NB_ANCHORS = 3
 
@@ -75,27 +78,45 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
         n = Point(a[0], a[1])
         plt.plot(n.x, n.y, '^', color='b')
     ax.grid(which='both')
-    plt.show()
-    #plt.savefig('./IMG/' + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_),
-     #           bbox_inches='tight')
+    # plt.show()
+    plt.savefig('./IMG/' + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_),
+                bbox_inches='tight')
 
 
-def getAllSubRegions(anchors, max_x_=MAX_X, max_y_=MAX_Y):
+def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
     area_list = []
-    anchors = sorted(anchors)
+    anchors_ = sorted(anchors_)
     bound_box = Polygon([(0, 0), (max_x_ - 1, 0), (max_x_ - 1, max_y_ - 1), (0, max_y_ - 1)])
     rest_of_area = bound_box
-    for a1, a2 in list(combinations(anchors, 2)):
+    rest_of_areaa = None
+
+    for a1, a2 in list(combinations(anchors_, 2)):
         a1 = Point(a1[0], a1[1])
         a2 = Point(a2[0], a2[1])
-        res = get2anchorsHslRegions(a1, a2,max_x_,max_y_)
-        for x in res:
-            x = fix_shape(x)
-            area_list.append(x)
-            drawNetwork(anchors, [x])
-            drawNetwork(anchors, [rest_of_area])
-            rest_of_area = rest_of_area.difference(x)
-    area_list.append(rest_of_area)
+        hsl_cr_list = get2anchorsHslRegions(a1, a2, max_x_, max_y_)
+        for x in hsl_cr_list:
+            xx = fix_shape(x)
+            if xx is not None and not xx.is_empty:
+                area_list.append(xx)
+                try:
+                    rest_of_area = rest_of_area.difference(xx)
+                except:
+                    # print("getAllSubRegions exception")
+                    pass
+                rest_of_areaa = fix_shape(rest_of_area)
+                rest_of_area = rest_of_areaa
+            #drawNetwork(anchors_, [xx])
+            #drawNetwork(anchors_, [rest_of_areaa])
+        #drawNetwork(anchors_, hsl_cr_list)
+        #drawNetwork(anchors_, [rest_of_areaa])
+
+    if rest_of_areaa is not None and not rest_of_areaa.is_empty:
+        area_list.append(rest_of_areaa)
+    else:
+        # print("getAllSubRegions We should normally never get here")
+        area_list.append(rest_of_area)
+
+    #drawNetwork(anchors_, area_list)
     return area_list
 
 
@@ -168,15 +189,15 @@ def intersect(item, disjoint_regions):
     cr_itemm = None
     for region in disjoint_regions:
         itemm = fix_shape(item)
-        if itemm is not None:  # and not itemm.is_empty:
+        if itemm is not None and not itemm.is_empty:
             regionn = fix_shape(region)
-            if regionn is not None: # and not regionn.is_empty:
+            if regionn is not None and not regionn.is_empty:
                 try:
                     common_area = itemm.intersection(regionn)
                 except:
                     print("unknown ------------------")
                 common_areaa = fix_shape(common_area)
-                if common_areaa is not None: #and not common_areaa.is_empty:
+                if common_areaa is not None and not common_areaa.is_empty:
                     res.append(common_areaa)
                     try:
                         cr_item = itemm.difference(regionn)
@@ -188,7 +209,7 @@ def intersect(item, disjoint_regions):
                     except:
                         print("UUnknown")
                     cr_regionn = fix_shape(cr_region)
-                    if cr_regionn is not None: #and not cr_regionn.is_empty:
+                    if cr_regionn is not None and not cr_regionn.is_empty:
                         res.append(cr_regionn)
                 else: # common_areaa is None
                     # there is not common area between item and region, add region only.
@@ -198,11 +219,11 @@ def intersect(item, disjoint_regions):
         else:
             #item is None
             regionn = fix_shape(region)
-            if regionn is not None:
+            if regionn is not None and not regionn.is_empty:
                 res.append(region)
-        if cr_itemm is not None:
+        if cr_itemm is not None and not cr_itemm.is_empty:
             item = cr_itemm
-    if cr_itemm is None:
+    if cr_itemm is None and not item.is_empty:
         res.append(item)
     else:
         res.append(cr_itemm)
@@ -211,10 +232,10 @@ def intersect(item, disjoint_regions):
 
 def fix_shape(shape_):
     if shape_ is None:
-        print("fix_shape: there is a shape which is none")
+        # print("fix_shape: there is a shape which is none")
         return None #this is kind of exit(0)
     if shape_.geom_type == 'MultiPolygon':
-        poly_list = [fix_precision(x) for x in shape_ if (x.area > 0.0001 and fix_precision(x).is_valid) ]
+        poly_list = [fix_precision(x) for x in shape_ if (x.area > 0.0001 and fix_precision(x).is_valid)]
         if len(poly_list) == 0:
             return None #Polygon()
         elif len(poly_list) == 1:

@@ -25,10 +25,10 @@ from shapely.wkt import loads, dumps
 shapely.speedups.enable()
 
 parser=argparse.ArgumentParser()
-parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
-parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y)
-parser.add_argument('--tics', help='Give the TICS value', default=TICS)
-parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS)
+parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
+parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y, type=int)
+parser.add_argument('--tics', help='Give the TICS value', default=TICS, type=int)
+parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS, type=int)
 
 args=parser.parse_args()
 
@@ -51,20 +51,21 @@ anchors_list = list(combinations(positions, anchors))
 
 start = time.time()
 #anchors_list = [[(7, 0), (7, 21), (21, 7), (21, 14)]]
-for index, anchors in enumerate(anchors_list):
- print(index,'/',len(anchors_list))
-# sys.stdout.write("\r%s/%d" % (color(index, len(anchors_list)), len(anchors_list)))
-# sys.stdout.flush()
- l = getAllSubRegions(anchors,max_x,max_y)
- res = getDisjointSubRegions(l)
- avgRA = getExpectation(res)
- if avgRA != 0:
-     if minAvgRA > avgRA:
-         minAvgRA = avgRA
-         optimal_anchors = []
-         for a in anchors:
-             optimal_anchors.append(a)
-         optimal_areas = res
+for index, anchors in enumerate(tqdm(anchors_list)):
+    # print(index,'/',len(anchors_list))
+    # sys.stdout.write("\r%s/%d" % (color(index, len(anchors_list)), len(anchors_list)))
+    # sys.stdout.flush()
+
+    l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
+    res = getDisjointSubRegions(l)
+    avgRA = getExpectation(res)
+    if avgRA != 0:
+        if minAvgRA > avgRA:
+            minAvgRA = avgRA
+            optimal_anchors = []
+            for a in anchors:
+                optimal_anchors.append(a)
+            optimal_areas = res
 # get the different residence area to draw them
 end = time.time()
 #drawNetwork(optimal_anchors, optimal_areas)
