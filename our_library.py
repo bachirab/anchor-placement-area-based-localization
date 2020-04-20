@@ -16,17 +16,18 @@ from descartes import PolygonPatch
 import shapely.speedups
 from shapely.wkt import loads, dumps
 from tqdm import tqdm
+
 shapely.speedups.enable()
 
-
 PRECISION = 5
-MAX_X = 4*7*15*31
-MAX_Y = 4*7*15*31
-TICS = 4*15*31
+MAX_X = 4 * 7 * 15 * 31
+MAX_Y = 4 * 7 * 15 * 31
+TICS = 4 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
+#  4,7,15,28,31,
 NB_ANCHORS = 3
 
-
 from decimal import *
+
 getcontext().prec = PRECISION
 
 
@@ -42,7 +43,8 @@ def minMax(a, b):
             return res
 
 
-def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb_anchors_=NB_ANCHORS, tics_=TICS, algo_="zzz", mode_="file"):
+def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb_anchors_=NB_ANCHORS, tics_=TICS,
+                algo_="zzz", mode_="file"):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     e = plt.Rectangle((0, 0), max_x_ - 1, max_y_ - 1, facecolor='w', edgecolor='black', linewidth=2.0)
@@ -78,10 +80,11 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
         plt.plot(n.x, n.y, '^', color='b')
     ax.grid(which='both')
     if mode_ == "file":
-        plt.savefig('./IMG/' + str(algo_) + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_), bbox_inches='tight')
+        plt.savefig(
+            './IMG/' + str(algo_) + str(nb_anchors_) + '_anchor_' + str(max_x_) + 'x' + str(max_y_) + '_' + str(tics_),
+            bbox_inches='tight')
     else:
         plt.show()
-
 
 
 def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
@@ -106,10 +109,10 @@ def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
                     pass
                 rest_of_areaa = fix_shape(rest_of_area)
                 rest_of_area = rest_of_areaa
-            #drawNetwork(anchors_, [xx])
-            #drawNetwork(anchors_, [rest_of_areaa])
-        #drawNetwork(anchors_, hsl_cr_list)
-        #drawNetwork(anchors_, [rest_of_areaa])
+            # drawNetwork(anchors_, [xx])
+            # drawNetwork(anchors_, [rest_of_areaa])
+        # drawNetwork(anchors_, hsl_cr_list)
+        # drawNetwork(anchors_, [rest_of_areaa])
 
     if rest_of_areaa is not None and not rest_of_areaa.is_empty:
         area_list.append(rest_of_areaa)
@@ -117,7 +120,7 @@ def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
         # print("getAllSubRegions We should normally never get here")
         area_list.append(rest_of_area)
 
-    #drawNetwork(anchors_, area_list)
+    # drawNetwork(anchors_, area_list)
     return area_list
 
 
@@ -175,10 +178,10 @@ def get2anchorsHslRegions(a0, a1, max_x_=MAX_X, max_y_=MAX_Y):
 
 
 def getDisjointSubRegions(all_regions_list):
-     if len(all_regions_list) == 1:
+    if len(all_regions_list) == 1:
         return all_regions_list
-     head_item = all_regions_list[0]
-     return intersect(head_item, getDisjointSubRegions(all_regions_list[1:]))
+    head_item = all_regions_list[0]
+    return intersect(head_item, getDisjointSubRegions(all_regions_list[1:]))
 
 
 def fix_precision(shape_, precision_=PRECISION):
@@ -202,7 +205,7 @@ def intersect(item, disjoint_regions):
                     res.append(common_areaa)
                     try:
                         cr_item = itemm.difference(regionn)
-                    except:                  
+                    except:
                         print("Unknown")
                     cr_itemm = fix_shape(cr_item)
                     try:
@@ -212,13 +215,13 @@ def intersect(item, disjoint_regions):
                     cr_regionn = fix_shape(cr_region)
                     if cr_regionn is not None and not cr_regionn.is_empty:
                         res.append(cr_regionn)
-                else: # common_areaa is None
+                else:  # common_areaa is None
                     # there is not common area between item and region, add region only.
                     # We do not know for other regions, so do not do anything for item
                     res.append(regionn)
             # region is empty do not do anything
         else:
-            #item is None
+            # item is None
             regionn = fix_shape(region)
             if regionn is not None and not regionn.is_empty:
                 res.append(region)
@@ -234,11 +237,11 @@ def intersect(item, disjoint_regions):
 def fix_shape(shape_):
     if shape_ is None:
         # print("fix_shape: there is a shape which is none")
-        return None #this is kind of exit(0)
+        return None  # this is kind of exit(0)
     if shape_.geom_type == 'MultiPolygon':
         poly_list = [fix_precision(x) for x in shape_ if (x.area > 0.0001 and fix_precision(x).is_valid)]
         if len(poly_list) == 0:
-            return None #Polygon()
+            return None  # Polygon()
         elif len(poly_list) == 1:
             if fix_precision(poly_list[0]).is_valid:
                 return Polygon(fix_precision(poly_list[0]))
@@ -246,7 +249,7 @@ def fix_shape(shape_):
                 return None
         else:
             if fix_precision(MultiPolygon(poly_list)).is_valid:
-                return fix_precision(MultiPolygon(poly_list))#MultiPolygon(poly_list)
+                return fix_precision(MultiPolygon(poly_list))  # MultiPolygon(poly_list)
             else:
                 return None
     elif shape_.geom_type == 'Polygon':
@@ -254,7 +257,7 @@ def fix_shape(shape_):
         if shape_.area > 0.0001 and fix_precision(shape_).is_valid:
             return fix_precision(shape_)
         else:
-            return None #Polygon()
+            return None  # Polygon()
     else:
         # print("there is a problem in your logic")
         return None
