@@ -18,7 +18,7 @@ max_y = args.max_y
 tics = args.tics
 nb_anchors = args.nb_anchors
 
-print("tics=" + str(tics) + " anchors=" + str(nb_anchors))
+print("Running brute force on tics=" + str(tics) + ", anchors=" + str(nb_anchors))
 
 # Param
 

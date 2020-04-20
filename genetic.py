@@ -17,21 +17,23 @@ import random
 from our_library import *
 import argparse
 
-parser=argparse.ArgumentParser()
-parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X)
-parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y)
-parser.add_argument('--tics', help='Give the TICS value', default=TICS)
-parser.add_argument('--anchors', help='Give the number of anchors', default=NB_ANCHORS)
+parser = argparse.ArgumentParser()
+parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
+parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y, type=int)
+parser.add_argument('--tics', help='Give the TICS value', default=TICS, type=int)
+parser.add_argument('--nb_anchors', help='Give the number of anchors', default=NB_ANCHORS, type=int)
 
-args=parser.parse_args()
+args = parser.parse_args()
 
 max_x = args.max_x
 max_y = args.max_y
 tics = args.tics
-anchors = args.anchors
+nb_anchors = args.nb_anchors
+
+print("Running genetic on tics=" + str(tics) + ", anchors=" + str(nb_anchors))
 
 
-"""This next part is the Brute Force method
+"""This next is
 
 Genetic algorithm method
 """
