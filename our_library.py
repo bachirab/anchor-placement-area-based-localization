@@ -20,9 +20,9 @@ from tqdm import tqdm
 shapely.speedups.enable()
 
 PRECISION = 5
-MAX_X = 4 * 7 * 15 * 31
+MAX_X = 4 * 7 * 15 * 31 # 13020
 MAX_Y = 4 * 7 * 15 * 31
-TICS = 4 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
+TICS = 7 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
 #  4,7,15,28,31,
 NB_ANCHORS = 3
 
@@ -277,6 +277,13 @@ def getExpectation(list_):
         else:
             return sum_sqr / sum_
 
+
+def all_positions(max_x=MAX_X, max_y=MAX_Y, tics=TICS):
+    positions = []
+    for i in range(max_x // tics):
+        for j in range(max_y // tics):
+            positions.append((i * tics, j * tics))
+    return positions
 
 def color(current, total):
     if current * 100 / total < 50:

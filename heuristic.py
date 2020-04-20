@@ -63,6 +63,18 @@ neighbor_list = [neighbor(x, step_=2) for x in initial]
 for items in itertools.product(*neighbor_list):
     anchors_list.append(list(items))
 
+into_list = list(itertools.chain(*anchors_list))
+
+for i in initial:
+    if i not in all_positions(max_x=max_x,max_y=max_y,tics=4*15*31):
+        print('FIRST ERROR ',i)
+
+for i in into_list:
+    if tuple(i) not in all_positions(max_x=max_x,max_y=max_y,tics=4*15*31):
+        print('SECOND ERROR ',i)
+print(all_positions(max_x=max_x,max_y=max_y,tics=4*15*31))
+drawNetwork(all_positions(max_x=max_x,max_y=max_y,tics=4*15*31),mode_='jjj')
+input()
 #drawNetwork(initial, algo_="initial", mode_="show")
 #into_list = list(itertools.chain(*anchors_list))
 #drawNetwork(into_list, algo_="nl", mode_="show")
