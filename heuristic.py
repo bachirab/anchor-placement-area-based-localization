@@ -21,9 +21,7 @@ nb_anchors = args.nb_anchors
 print("Running heuristic on tics=" + str(tics) + ", anchors=" + str(nb_anchors))
 
 
-# Param
-
-def neighbor(point, step_=2):
+def neighbor(point, target_tics_):
     """ Function return the neighbors of a point x in the matrix A
     take as input the coordinate of x and dim the dimension of A then
     returns the neighbors of x in the matrix B which have 2*dim elements.
@@ -32,12 +30,11 @@ def neighbor(point, step_=2):
     returns : [[3, 1], [3, 2], [3, 3], [4, 1], [4, 2], [4, 3], [5, 1], [5, 2], [5, 3]]
     """
     a = np.array(point)
-    epsilon = tics * step_
     adjacents = []
-    for i in range(a[0] - epsilon, a[0] + epsilon + 1, tics):
-        if 0 <= i < max_x - 1:
-            for j in range(a[1] - epsilon, a[1] + epsilon + 1, tics):
-                if 0 <= j < max_y - 1:
+    for i in range(a[0] - target_tics_, a[0] + target_tics_ + 1, target_tics_):
+        if 0 <= i <= max_x:
+            for j in range(a[1] - target_tics_, a[1] + target_tics_ + 1, target_tics_):
+                if 0 <= j <= max_y:
                     adjacents.append([i, j])
     return adjacents
 
@@ -45,8 +42,8 @@ def neighbor(point, step_=2):
 # Param
 # For every number of anchors, we need to initialise the initial vector which gives the optimal
 # anchor placement for the low discretisation.
-#initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
-initial =[(0, 6510), (6510, 0), (6510, 6510)]  # tics=3255 anchors=3 4*4
+# initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
+# initial =[(0, 6510), (6510, 0), (6510, 6510)]  # tics=3255 anchors=3 4*4
 # Remember that [(3255, 0), (3255, 9765), (9765, 6510)] = [(7,0),(7,21),(21,14)]
 # initial = [(6510, 3255), (6510, 9765), (9765, 0), (9765, 9765)] #4 anchors 4*4
 
@@ -56,55 +53,54 @@ initial =[(0, 6510), (6510, 0), (6510, 6510)]  # tics=3255 anchors=3 4*4
 # drawNetwork(neighbor(positions[200]), algo_="n1", mode_="show")
 
 # for choice in [7]:#,15,31]:
-#choice: int = 7
-#tics = tics // choice
-anchors_list = []
-neighbor_list = [neighbor(x, step_=2) for x in initial]
-for items in itertools.product(*neighbor_list):
-    anchors_list.append(list(items))
+# choice: int = 7
+# tics = tics // choice
+# anchors_list = []
+# neighbor_list = [neighbor(x, step_=2) for x in initial]
+# for items in itertools.product(*neighbor_list):
+#     anchors_list.append(list(items))
 
-into_list = list(itertools.chain(*anchors_list))
-
-for i in initial:
-    if i not in all_positions(max_x=max_x,max_y=max_y,tics=4*15*31):
-        print('FIRST ERROR ',i)
-
-for i in into_list:
-    if tuple(i) not in all_positions(max_x=max_x,max_y=max_y,tics=4*15*31):
-        print('SECOND ERROR ',i)
-print(all_positions(max_x=max_x,max_y=max_y,tics=4*15*31))
-drawNetwork(all_positions(max_x=max_x,max_y=max_y,tics=4*15*31),mode_='jjj')
-input()
-#drawNetwork(initial, algo_="initial", mode_="show")
-#into_list = list(itertools.chain(*anchors_list))
-#drawNetwork(into_list, algo_="nl", mode_="show")
+# anchors_list = []
+# neighbor_list = [neighbor(x, initial_tics_=12, target_tics_=6) for x in initial]
+# for items in itertools.product(*neighbor_list):
+#     anchors_list.append(list(items))
 
 
-minAvgRA = 999999999
-optimal_anchors = []
-start = time.time()
-for index, anchors in enumerate(tqdm(anchors_list)):
-    l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
-    res = getDisjointSubRegions(l)
-    avgRA = getExpectation(res)
-    if avgRA != 0:
-        if minAvgRA > avgRA:
-            minAvgRA = avgRA
-            optimal_anchors = []
-            for a in anchors:
-                optimal_anchors.append(a)
-            optimal_areas = res
-end = time.time()
+n0 = neighbor((12, 12), target_tics_=3)
+print(n0)
+drawNetwork(n0, mode_='dirte')
+# into_list = list(itertools.chain(*anchors_list))
 
-drawNetwork(optimal_anchors, optimal_areas, algo_="heuristic")
-
-print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
-print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
-
-f_res = open('./TXT/heuristic.txt', 'a')
-f_res.write(str(optimal_anchors) + ';' + str(minAvgRA) + ';' + str(end - start) + ';' + str(NB_ANCHORS) + ';' + str(
-    tics) + '\n')
-f_res.close()
-
-##TODO The initial point is from brute force, I find it by multiplying it with the TICS.
-##TODO I should verify whether the results of the neigbhoor function is reduced to the current TICS
+# #drawNetwork(initial, algo_="initial", mode_="show")
+# #into_list = list(itertools.chain(*anchors_list))
+# #drawNetwork(into_list, algo_="nl", mode_="show")
+#
+#
+# minAvgRA = 999999999
+# optimal_anchors = []
+# start = time.time()
+# for index, anchors in enumerate(tqdm(anchors_list)):
+#     l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
+#     res = getDisjointSubRegions(l)
+#     avgRA = getExpectation(res)
+#     if avgRA != 0:
+#         if minAvgRA > avgRA:
+#             minAvgRA = avgRA
+#             optimal_anchors = []
+#             for a in anchors:
+#                 optimal_anchors.append(a)
+#             optimal_areas = res
+# end = time.time()
+#
+# drawNetwork(optimal_anchors, optimal_areas, algo_="heuristic")
+#
+# print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
+# print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
+#
+# f_res = open('./TXT/heuristic.txt', 'a')
+# f_res.write(str(optimal_anchors) + ';' + str(minAvgRA) + ';' + str(end - start) + ';' + str(NB_ANCHORS) + ';' + str(
+#     tics) + '\n')
+# f_res.close()
+#
+# ##TODO The initial point is from brute force, I find it by multiplying it with the TICS.
+# ##TODO I should verify whether the results of the neigbhoor function is reduced to the current TICS

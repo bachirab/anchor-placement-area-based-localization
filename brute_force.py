@@ -24,7 +24,7 @@ print("Running brute force on tics=" + str(tics) + ", anchors=" + str(nb_anchors
 
 minAvgRA = 9999999999
 
-positions = all_positions(max_x=max_x,max_y=max_y,tics=tics)
+positions = all_positions(max_x=max_x, max_y=max_y, tics=tics)
 anchors_list = list(combinations(positions, nb_anchors))
 
 start = time.time()

@@ -20,9 +20,14 @@ from tqdm import tqdm
 shapely.speedups.enable()
 
 PRECISION = 5
-MAX_X = 4 * 7 * 15 * 31 # 13020
-MAX_Y = 4 * 7 * 15 * 31
-TICS = 7 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
+# MAX_X = 4 * 7 * 15 * 31 # 13020
+# MAX_Y = 4 * 7 * 15 * 31
+# TICS = 7 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
+# #  4,7,15,28,31,
+MAX_X = 24 # 3, 6, 12, 24 (4, 8, 16, 32)
+MAX_Y = 24
+NB_POINT_PER_SIDE = 3
+TICS = MAX_X // (NB_POINT_PER_SIDE - 1)  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
 #  4,7,15,28,31,
 NB_ANCHORS = 3
 
@@ -47,7 +52,7 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
                 algo_="zzz", mode_="file"):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    e = plt.Rectangle((0, 0), max_x_ - 1, max_y_ - 1, facecolor='w', edgecolor='black', linewidth=2.0)
+    e = plt.Rectangle((0, 0), max_x_, max_y_, facecolor='w', edgecolor='black', linewidth=2.0)
     ax.add_patch(e)
     for area in residence_area_l:
         if area is None:
@@ -90,7 +95,7 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
 def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
     area_list = []
     anchors_ = sorted(anchors_)
-    bound_box = Polygon([(0, 0), (max_x_ - 1, 0), (max_x_ - 1, max_y_ - 1), (0, max_y_ - 1)])
+    bound_box = Polygon([(0, 0), (max_x_, 0), (max_x_, max_y_), (0, max_y_)])
     rest_of_area = bound_box
     rest_of_areaa = None
 
@@ -125,7 +130,7 @@ def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
 
 
 def get2anchorsHslRegions(a0, a1, max_x_=MAX_X, max_y_=MAX_Y):
-    bound_box = Polygon([(0, 0), (max_x_ - 1, 0), (max_x_ - 1, max_y_ - 1), (0, max_y_ - 1)])
+    bound_box = Polygon([(0, 0), (max_x_, 0), (max_x_, max_y_), (0, max_y_)])
     c1 = a0.buffer(a0.distance(a1))
     c2 = a1.buffer(a0.distance(a1))
     v = c1.intersection(c2)
@@ -280,10 +285,11 @@ def getExpectation(list_):
 
 def all_positions(max_x=MAX_X, max_y=MAX_Y, tics=TICS):
     positions = []
-    for i in range(max_x // tics):
-        for j in range(max_y // tics):
+    for i in range(max_x // tics + 1):
+        for j in range(max_y // tics + 1):
             positions.append((i * tics, j * tics))
     return positions
+
 
 def color(current, total):
     if current * 100 / total < 50:
