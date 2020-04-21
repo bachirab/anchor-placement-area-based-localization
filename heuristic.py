@@ -68,7 +68,17 @@ initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 
 anchors_list = get_neighbor_list(initial, target_tics=MAX_X // (6 - 1))
 
+l = getAllSubRegions(anchors_=initial, max_x_=max_x, max_y_=max_y)
+res = getDisjointSubRegions(l)
+print(get_entropy(res))
 
+
+l = getAllSubRegions(anchors_=[[1036, 1556], [3628, 2592], [2592, 4148]], max_x_=max_x, max_y_=max_y)
+res = getDisjointSubRegions(l)
+print(get_entropy(res))
+
+
+input()
 minAvgRA = 999999999
 optimal_anchors = []
 start = time.time()

@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from descartes import PolygonPatch
 import shapely.speedups
 from shapely.wkt import loads, dumps
+from scipy.stats import entropy
+
 from tqdm import tqdm
 shapely.speedups.enable()
 
@@ -23,9 +25,9 @@ PRECISION = 5
 # MAX_Y = 4 * 7 * 15 * 31
 # TICS = 7 * 15 * 31  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
 # #  4,7,15,28,31,
-MAX_X = 3*6*12*24 # 3, 6, 12, 24 (4, 8, 16, 32)
-MAX_Y = 3*6*12*24
-NB_POINT_PER_SIDE = 6
+MAX_X = 192 #3, 6, 12, 24, 48, 96, 192
+MAX_Y = 192
+NB_POINT_PER_SIDE = 5 # In: 3,5,9,17,33,97
 TICS = MAX_X // (NB_POINT_PER_SIDE - 1)
 NB_ANCHORS = 3
 
@@ -279,6 +281,17 @@ def getExpectation(list_):
             return 0
         else:
             return sum_sqr / sum_
+
+
+def get_entropy(list_):
+    if len(list_) == 0:
+        return 0
+    else:
+        area_sum_ = np.sum([x.area for x in list_])
+        print(area_sum_)
+        px_ = [x.area/area_sum_ for x in list_]
+        print(px_,sum(px_))
+        return entropy(px_,base=10)
 
 
 def all_positions(max_x=MAX_X, max_y=MAX_Y, tics=TICS):
