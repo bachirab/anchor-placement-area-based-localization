@@ -8,14 +8,16 @@ shapely.speedups.enable()
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
 parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y, type=int)
-parser.add_argument('--tics', help='Give the TICS value', default=TICS, type=int)
+parser.add_argument('--points', help='Give the TICS value', default=NB_POINT_PER_SIDE, type=int)
 parser.add_argument('--nb_anchors', help='Give the number of anchors', default=NB_ANCHORS, type=int)
 
-args=parser.parse_args()
+args = parser.parse_args()
 
 max_x = args.max_x
 max_y = args.max_y
-tics = args.tics
+n_points = args.points
+#tics = args.tics
+tics = max_x // (n_points - 1)
 nb_anchors = args.nb_anchors
 
 print("Running brute force on tics=" + str(tics) + ", anchors=" + str(nb_anchors))
