@@ -55,7 +55,7 @@ def get_neighbor_list(initial_list,target_tics):
 # Remember that [(3255, 0), (3255, 9765), (9765, 6510)] = [(7,0),(7,21),(21,14)]
 # initial = [(6510, 3255), (6510, 9765), (9765, 0), (9765, 9765)] #4 anchors 4*4
 initial = [(0, 12), (12, 12), (12, 24)] #3 anchors 3*3
-initial = [(0, 2592), (2592, 2592), (2592, 5184)]
+initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 # print(len(positions))
 # drawNetwork([positions[200]], algo_="initial", mode_="show")
 # drawNetwork(neighbor(positions[200]), algo_="n1", mode_="show")

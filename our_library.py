@@ -16,7 +16,6 @@ from descartes import PolygonPatch
 import shapely.speedups
 from shapely.wkt import loads, dumps
 from tqdm import tqdm
-
 shapely.speedups.enable()
 
 PRECISION = 5
@@ -26,7 +25,7 @@ PRECISION = 5
 # #  4,7,15,28,31,
 MAX_X = 3*6*12*24 # 3, 6, 12, 24 (4, 8, 16, 32)
 MAX_Y = 3*6*12*24
-NB_POINT_PER_SIDE = 6
+NB_POINT_PER_SIDE = 3
 TICS = MAX_X // (NB_POINT_PER_SIDE - 1)  # here are all the values: 3255,1860,868,465,420,217,105,124,60,31,28,15,7,4 ==>
 #  4,7,15,28,31,
 NB_ANCHORS = 3
