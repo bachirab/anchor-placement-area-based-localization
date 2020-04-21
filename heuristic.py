@@ -64,7 +64,7 @@ initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 # #into_list = list(itertools.chain(*anchors_list))
 # #drawNetwork(into_list, algo_="nl", mode_="show")
 
-anchors_list = get_neighbor_list(initial, target_tics=6)
+anchors_list = get_neighbor_list(initial, target_tics=MAX_X // (6 - 1))
 
 
 minAvgRA = 999999999
