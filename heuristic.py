@@ -56,8 +56,8 @@ def get_neighbor_list(initial_list,target_tics):
 # initial =[(0, 6510), (6510, 0), (6510, 6510)]  # tics=3255 anchors=3 4*4
 # Remember that [(3255, 0), (3255, 9765), (9765, 6510)] = [(7,0),(7,21),(21,14)]
 # initial = [(6510, 3255), (6510, 9765), (9765, 0), (9765, 9765)] #4 anchors 4*4
-initial = [(0, 12), (12, 12), (12, 24)] #3 anchors 3*3
-initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
+#initial = [(0, 12), (12, 12), (12, 24)] #3 anchors 3*3
+#initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 # print(len(positions))
 # drawNetwork([positions[200]], algo_="initial", mode_="show")
 # drawNetwork(neighbor(positions[200]), algo_="n1", mode_="show")
@@ -65,20 +65,10 @@ initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 # #drawNetwork(initial, algo_="initial", mode_="show")
 # #into_list = list(itertools.chain(*anchors_list))
 # #drawNetwork(into_list, algo_="nl", mode_="show")
+initial = [(0, 96), (96, 96), (96, 192)] #tics=96 anchors=3 max_x=192
 
 anchors_list = get_neighbor_list(initial, target_tics=tics)
 
-l = getAllSubRegions(anchors_=initial, max_x_=max_x, max_y_=max_y)
-res = getDisjointSubRegions(l)
-print(get_entropy(res))
-
-
-l = getAllSubRegions(anchors_=[[1036, 1556], [3628, 2592], [2592, 4148]], max_x_=max_x, max_y_=max_y)
-res = getDisjointSubRegions(l)
-print(get_entropy(res))
-
-
-input()
 minAvgRA = 999999999
 optimal_anchors = []
 start = time.time()
