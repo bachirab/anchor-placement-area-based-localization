@@ -43,7 +43,7 @@ for index, anchors in enumerate(tqdm(anchors_list)):
             optimal_areas = res
 end = time.time()
 
-drawNetwork(optimal_anchors, optimal_areas, algo_="brute")
+drawNetwork(optimal_anchors, optimal_areas, algo_="brute",max_x_=max_x, max_y_=max_y)
 
 print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
 print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
