@@ -66,7 +66,7 @@ initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
 # #into_list = list(itertools.chain(*anchors_list))
 # #drawNetwork(into_list, algo_="nl", mode_="show")
 
-anchors_list = get_neighbor_list(initial, target_tics=MAX_X // (6 - 1))
+anchors_list = get_neighbor_list(initial, target_tics=tics)
 
 l = getAllSubRegions(anchors_=initial, max_x_=max_x, max_y_=max_y)
 res = getDisjointSubRegions(l)
