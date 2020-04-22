@@ -80,7 +80,6 @@ for index, anchors in enumerate(anchors_list):
     l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)
-    print(anchors, avgRA)
     if avgRA != 0:
         if minAvgRA > avgRA:
             minAvgRA = avgRA

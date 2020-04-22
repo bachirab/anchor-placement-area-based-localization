@@ -202,9 +202,7 @@ class GA(object):
 
 
 def Work(anchors):
-    
-    l = getAllSubRegions(anchors,max_x,max_y)
-    #print(anchors)
+    l = getAllSubRegions(anchors)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)
     return [avgRA, res, anchors]
@@ -212,36 +210,34 @@ def Work(anchors):
 
 ######### Main ()
 
-if __name__ == "__main__":
+ga = GA(
+    fitness_func=Work,
+    n_individu=10,
+    CrossThreshold=0.2,
+    MutationThreshold=0.3,
+    gen=20,
+    dim=nb_anchors,
+    MAX_X=max_x,
+    MAX_Y=max_y,
+    TICS=tics
+)
+
+# with big space comes big responsabilty ( Mutation problem )
+start = time.time()
+optimal_anchors = ga.run()
+end = time.time()
+
+# getting the optimal area and the minavg from optimal anchors
+l = getAllSubRegions(optimal_anchors, max_x, max_y)
+optimal_areas = getDisjointSubRegions(l)
+minAvgRA = getExpectation(optimal_areas)
 
 
-    ga = GA(
-        fitness_func=Work,
-        n_individu=10,
-        CrossThreshold=0.2,
-        MutationThreshold=0.3,
-        gen=20,
-        dim=NB_ANCHORS,
-        MAX_X=MAX_X,
-        MAX_Y=MAX_Y,
-        TICS=TICS
-    )
+drawNetwork(optimal_anchors, optimal_areas, algo_="genetic",max_x_=max_x, max_y_=max_y)
 
-    # with big space comes big responsabilty ( Mutation problem )
+print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
+print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
-    start = time.time()
-    optimal_anchors = ga.run()
-    end = time.time()
-
-    min_avg, residence_area_l, anchor = Work(optimal_anchors)
-
-    drawNetwork(optimal_anchors, residence_area_l)
-    print("\n**Optimal Anchor Position: ", optimal_anchors)
-    print("**Minimum Avrg: " + str(min_avg))
-    print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
-
-    f_res = open('./IMG/ga.txt', 'a')
-    f_res.write( str(optimal_anchors)+';' + str(min_avg)+';'+str(end - start)+';'+ str(NB_ANCHORS)+';'+str(TICS)+'\n')
-    f_res.close()
-
-
+f_res = open('./TXT/genetic.txt', 'a')
+f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
+f_res.close()
