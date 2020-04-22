@@ -41,7 +41,7 @@ def neighbor(point, target_tics_):
     return adjacents
 
 
-def get_neighbor_list(initial_list,target_tics):
+def get_neighbor_list(initial_list, target_tics):
     anchors_list = []
     neighbor_list = [neighbor(x, target_tics_=target_tics) for x in initial_list]
     for items in itertools.product(*neighbor_list):
@@ -66,17 +66,21 @@ def get_neighbor_list(initial_list,target_tics):
 # #into_list = list(itertools.chain(*anchors_list))
 # #drawNetwork(into_list, algo_="nl", mode_="show")
 #initial = [(0, 96), (96, 96), (96, 192)] #tics=96 anchors=3 max_x=192
+
 initial = [(96, 0), (96, 96), (192, 96)] #tics=96 anchors=3 max_x=192 max_y=96
 
 anchors_list = get_neighbor_list(initial, target_tics=tics)
 
+# print(anchors_list)
+
 minAvgRA = 999999999
 optimal_anchors = []
 start = time.time()
-for index, anchors in enumerate(tqdm(anchors_list)):
+for index, anchors in enumerate(anchors_list):
     l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
     res = getDisjointSubRegions(l)
     avgRA = getExpectation(res)
+    print(anchors, avgRA)
     if avgRA != 0:
         if minAvgRA > avgRA:
             minAvgRA = avgRA
