@@ -17,23 +17,28 @@ import random
 from our_library import *
 import argparse
 
-random.seed(33)
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
 parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y, type=int)
-parser.add_argument('--points', help='Give the TICS value', default=NB_POINT_PER_SIDE, type=int)
+parser.add_argument('--points', help='Give the number points per side', default=NB_POINT_PER_SIDE, type=int)
 parser.add_argument('--nb_anchors', help='Give the number of anchors', default=NB_ANCHORS, type=int)
+parser.add_argument('--seed', help='Give the seed value', default=1, type=int)
+parser.add_argument('--nb_ind', help='Give the number of individuals', default=10, type=int)
+parser.add_argument('--nb_gen', help='Give the number of generations', default=10, type=int)
 
 args = parser.parse_args()
 
 max_x = args.max_x
 max_y = args.max_y
 n_points = args.points
-#tics = args.tics
-tics = max_x // (n_points - 1)
 nb_anchors = args.nb_anchors
+seed_value = args.seed
+nb_ind = args.nb_ind
+nb_gen = args.nb_gen
 
+tics = max_x // (n_points - 1)
 print("Running genetic on tics=" + str(tics) + ", anchors=" + str(nb_anchors))
+random.seed(seed_value)
 
 
 """This next is
@@ -117,8 +122,9 @@ class GA(object):
                :int(rate * self.n_ind)]
         return [fitness_population[i[1]][1] for i in best]
 
-    def update(self, fitness_population):
+    def update(self, fitness_population_):
         #        allChildren = self.eletism(0.25, fitness_population)
+        fitness_population = deepcopy(fitness_population_)
         allChildren = []
         generator = self.selectParents(fitness_population)
         nb_iterations = 0
@@ -182,26 +188,16 @@ class GA(object):
             return "\033[93m %d \033[0m" % current
         return "\033[92m %d \033[0m" % current
 
-
     def run(self):
-        for i in np.arange(self.gen):
-            stdout.write("\r%s/%d" % (self.color(i, self.gen), self.gen))
-            stdout.flush()
+        for i in tqdm(np.arange(self.gen)):
             fitness_population = [(self.fitness(individual), individual) for individual in self.pop]
             self.f_archive = self.f_archive + fitness_population
             self.archive = self.archive + self.pop
             self.pop = self.update(fitness_population)
-
         self.f_archive.sort()
-        for indice in self.f_archive:
-            if indice[0] == None:
-                pass
-            else:
-                optimal_ind = indice[1]
-                break
+        optimal_ind = self.f_archive[0][1]
         return [optimal_ind[2 * i:2 * (i + 1)] for i in range(self.dim // 2)]
-        
-        
+
     def decode(self,optimal_ind):
         return [optimal_ind[2 * i:2 * (i + 1)] for i in range(self.dim // 2)]
 
@@ -220,10 +216,10 @@ def Work(anchors):
 
 ga = GA(
     fitness_func=Work,
-    n_individu=10,
+    n_individu=nb_ind,
     CrossThreshold=0.2,
     MutationThreshold=0.3,
-    gen=20,
+    gen=nb_gen,
     dim=nb_anchors,
     MAX_X=max_x,
     MAX_Y=max_y,
@@ -236,7 +232,9 @@ optimal_anchors = ga.run()
 end = time.time()
 
 # getting the optimal area and the minavg from optimal anchors
-l = getAllSubRegions(optimal_anchors, max_x, max_y)
+print(optimal_anchors)
+
+l = getAllSubRegions(optimal_anchors)
 optimal_areas = getDisjointSubRegions(l)
 minAvgRA = getExpectation(optimal_areas)
 
