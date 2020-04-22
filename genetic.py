@@ -17,6 +17,7 @@ import random
 from our_library import *
 import argparse
 
+random.seed(33)
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
 parser.add_argument('--max_y', help='Give the MAX_Y value', default=MAX_Y, type=int)
@@ -72,7 +73,7 @@ class GA(object):
             for j in range(MAX_Y // TICS):
                 self.all.append((i, j))
         for i in range(self.n_ind):
-            self.pop.append(list(np.random.randint(0, self.space, self.dim) * TICS))
+            self.pop.append(list(np.random.randint(0, self.space+1, self.dim) * TICS))
 
     def crossover(self, parents):
         first_parant, second_parent = parents
@@ -82,8 +83,8 @@ class GA(object):
         return (child_1, child_2)
 
     def mutation(self, individual):
-        #        new_place = np.random.choice(list( set(range(self.space)) - set(individual)))
-        new_place = np.random.choice(range(self.space)) * self.TICS
+        #        new_place = np.random.choice(list( set(range(self.space+1)) - set(individual)))
+        new_place = np.random.choice(range(self.space+1)) * self.TICS
         index = np.random.randint(0, self.dim)
         individual[index] = new_place
         return individual
@@ -120,7 +121,9 @@ class GA(object):
         #        allChildren = self.eletism(0.25, fitness_population)
         allChildren = []
         generator = self.selectParents(fitness_population)
-        while len(allChildren) < len(fitness_population):
+        nb_iterations = 0
+        while len(allChildren) < len(fitness_population) and nb_iterations < 100000:
+            nb_iterations+=1
             parents = next(generator)
             if random.random() > self.CrossThreshold:
                 children = self.crossover(parents)
@@ -134,6 +137,11 @@ class GA(object):
                 else:
                     if child not in self.archive:
                         allChildren.append(child)
+        if len(allChildren) < len(fitness_population):
+            tmp = []
+            for i in range(len(fitness_population)-len(allChildren)):
+                tmp.append(list(np.random.randint(0, self.space + 1, self.dim) * TICS))
+            return allChildren.extend(tmp)
         # TODO Think about eletism
         return allChildren[:len(fitness_population)]  # May exceed
 
