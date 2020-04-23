@@ -67,8 +67,16 @@ def get_neighbor_list(initial_list, target_tics):
 # #drawNetwork(into_list, algo_="nl", mode_="show")
 #initial = [(0, 96), (96, 96), (96, 192)] #tics=96 anchors=3 max_x=192
 
-initial = [(96, 0), (96, 96), (192, 96)] #tics=96 anchors=3 max_x=192 max_y=96
+#[(0, 96), (96, 96), (96, 192)]]#3;96
+#[(0, 96), (96, 0), (96, 96), (192, 96)]#4;96
+#[(0, 0), (0, 96), (0, 192), (96, 96), (192, 96)]#5;96
 
+initial_list = [[(0, 96), (96, 96), (96, 192)],
+                [(0, 96), (96, 0), (96, 96), (192, 96)],
+                [(0, 0), (0, 96), (0, 192), (96, 96), (192, 96)]] #we get this from brute force
+
+
+initial = initial_list[nb_anchors-3]# chose the right initial according to nb_anchors
 anchors_list = get_neighbor_list(initial, target_tics=tics)
 
 # print(anchors_list)
