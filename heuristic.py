@@ -95,8 +95,8 @@ print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
 print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
 f_res = open('./TXT/heuristic.txt', 'a')
-f_res.write(str(optimal_anchors) + ';' + str(minAvgRA) + ';' + str(end - start) + ';' + str(NB_ANCHORS) + ';' + str(
-    tics) + '\n')
+f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
+
 f_res.close()
 
 ##TODO The initial point is from brute force, I find it by multiplying it with the TICS.
