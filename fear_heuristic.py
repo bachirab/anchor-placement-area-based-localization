@@ -88,7 +88,7 @@ for _tics in list_tics:
     anchors_list = get_neighbor_list(initial, target_tics=_tics)
     minAvgRA = 999999999
     optimal_anchors = []
-    for index, anchors in enumerate(anchors_list):
+    for index, anchors in enumerate(tqdm(anchors_list)):
         l = getAllSubRegions(anchors_=anchors, max_x_=max_x, max_y_=max_y)
         res = getDisjointSubRegions(l)
         avgRA = getExpectation(res)
@@ -102,12 +102,12 @@ for _tics in list_tics:
     initial = deepcopy(optimal_anchors)
 end = time.time()
 
-drawNetwork(optimal_anchors, optimal_areas, algo_="heuristic")
+drawNetwork(optimal_anchors, optimal_areas, algo_="fear_heuristic")
 
 print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
 print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
-f_res = open('./TXT/heuristic.txt', 'a')
+f_res = open('./TXT/fear_heuristic.txt', 'a')
 f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
 
 f_res.close()
