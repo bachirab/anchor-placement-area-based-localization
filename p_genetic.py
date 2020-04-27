@@ -16,6 +16,7 @@ from copy import deepcopy
 import random
 from our_library import *
 import argparse
+from itertools import product
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_x', help='Give the MAX_X value', default=MAX_X, type=int)
@@ -24,7 +25,7 @@ parser.add_argument('--points', help='Give the number points per side', default=
 parser.add_argument('--nb_anchors', help='Give the number of anchors', default=NB_ANCHORS, type=int)
 parser.add_argument('--seed', help='Give the seed value', default=1, type=int)
 parser.add_argument('--nb_ind', help='Give the number of individuals', default=10, type=int)
-parser.add_argument('--nb_gen', help='Give the number of generations', default=10, type=int)
+parser.add_argument('--nb_gen', help='Give the number of generations', default=20, type=int)
 
 args = parser.parse_args()
 
@@ -214,9 +215,14 @@ def Work(anchors):
 
 ######### Main ()
 
+anchors = [3,4,5]
+tics_ = [96, 48, 24, 12, 6, 2]
+all_parameters =list( product(*[anchors,tics_]))
 
 # with big space comes big responsabilty ( Mutation problem )
-def parallel(seed_value):
+def parallel(index):
+    nb_anchors = all_parameters[index][0]
+    tics = all_parameters[index][1]
     ga = GA(
         fitness_func=Work,
         n_individu=nb_ind,
@@ -228,7 +234,7 @@ def parallel(seed_value):
         MAX_Y=max_y,
         TICS=tics
     )
-    random.seed(seed_value)
+    random.seed(index)
     start = time.time()
     optimal_anchors = ga.run()
     end = time.time()
@@ -240,7 +246,7 @@ def parallel(seed_value):
     minAvgRA = getExpectation(optimal_areas)
 
 
-    drawNetwork(optimal_anchors, optimal_areas, algo_="p_genetic",max_x_=max_x, max_y_=max_y)
+#    drawNetwork(optimal_anchors, optimal_areas, algo_="p_genetic",max_x_=max_x, max_y_=max_y)
 
     print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
     print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
