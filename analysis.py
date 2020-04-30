@@ -8,6 +8,14 @@ h_data = "TXT/heuristic.txt"
 g_data = "TXT/genetic.txt"
 pg_data = "TXT/p_genetic.txt"
 
+worst = [[0,0],[0,192],[192,192]]
+l = getAllSubRegions(anchors_=[(0, 96), (96, 0), (96, 96), (192, 96)])
+res = getDisjointSubRegions(l)
+drawNetwork(worst, res, mode_="ss")
+avgRA = getExpectation(res)
+entr, px_ = get_entropy(res)
+print(avgRA, entr)
+input()
 
 def draw_comparison(df, nb_anchors, tics, algorithms: list):
     df.groupby(['nb_anchors', 'tics', 'algorithm']).mean().loc[nb_anchors,:,:]['Expectation']\
