@@ -90,6 +90,7 @@ def drawNetwork(anchors, residence_area_l=[None], max_x_=MAX_X, max_y_=MAX_Y, nb
             bbox_inches='tight')
     else:
         plt.show()
+    return ax
 
 
 def getAllSubRegions(anchors_, max_x_=MAX_X, max_y_=MAX_Y):
@@ -288,10 +289,8 @@ def get_entropy(list_):
         return 0
     else:
         area_sum_ = np.sum([x.area for x in list_])
-        print(area_sum_)
         px_ = [x.area/area_sum_ for x in list_]
-        print(px_,sum(px_))
-        return entropy(px_,base=10)
+        return entropy(px_,base=len(px_)),[x.area for x in list_]
 
 
 def all_positions(max_x=MAX_X, max_y=MAX_Y, tics=TICS):
