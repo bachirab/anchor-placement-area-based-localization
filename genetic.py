@@ -189,11 +189,13 @@ class GA(object):
         return "\033[92m %d \033[0m" % current
 
     def run(self):
+        self.evolution = []
         for i in tqdm(np.arange(self.gen)):
             fitness_population = [(self.fitness(individual), individual) for individual in self.pop]
             self.f_archive = self.f_archive + fitness_population
             self.archive = self.archive + self.pop
             self.pop = self.update(fitness_population)
+            self.evolution.append([i, min(self.f_archive)[0]])
         self.f_archive.sort()
         optimal_ind = self.f_archive[0][1]
         return [optimal_ind[2 * i:2 * (i + 1)] for i in range(self.dim // 2)]
@@ -247,3 +249,10 @@ print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 f_res = open('./TXT/genetic.txt', 'a')
 f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
 f_res.close()
+
+f_evo = open('./TXT/evolution.txt', 'a')
+for e in ga.evolution:
+    f_evo.write(str(nb_anchors)+';'+str(e[0])+';'+str(e[1])+'\n')
+f_evo.close()
+
+
