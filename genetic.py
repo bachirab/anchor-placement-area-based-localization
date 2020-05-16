@@ -191,11 +191,13 @@ class GA(object):
     def run(self):
         self.evolution = []
         for i in tqdm(np.arange(self.gen)):
+            start = time.time()
             fitness_population = [(self.fitness(individual), individual) for individual in self.pop]
             self.f_archive = self.f_archive + fitness_population
             self.archive = self.archive + self.pop
             self.pop = self.update(fitness_population)
-            self.evolution.append([i, min(self.f_archive)[0]])
+            end = time.time()
+            self.evolution.append([i, min(self.f_archive)[0], end-start])
         self.f_archive.sort()
         optimal_ind = self.f_archive[0][1]
         return [optimal_ind[2 * i:2 * (i + 1)] for i in range(self.dim // 2)]
@@ -252,7 +254,7 @@ f_res.close()
 
 f_evo = open('./TXT/evolution.txt', 'a')
 for e in ga.evolution:
-    f_evo.write(str(nb_anchors)+';'+str(e[0])+';'+str(e[1])+'\n')
+    f_evo.write(str(nb_anchors)+';'+str(e[0])+';'+str(e[1])+';'+str(e[2])+'\n')
 f_evo.close()
 
 
