@@ -17,7 +17,6 @@ args = parser.parse_args()
 max_x = args.max_x
 max_y = args.max_y
 n_points = args.points
-#tics = args.tics
 tics = max_x // (n_points - 1)
 nb_anchors = args.nb_anchors
 
@@ -53,24 +52,6 @@ def get_neighbor_list(initial_list, target_tics):
 # Param
 # For every number of anchors, we need to initialise the initial vector which gives the optimal
 # anchor placement for the low discretisation.
-# initial = [(3255, 0), (3255, 9765), (9765, 6510)]  # 3 anchors 4*4
-# initial =[(0, 6510), (6510, 0), (6510, 6510)]  # tics=3255 anchors=3 4*4
-# Remember that [(3255, 0), (3255, 9765), (9765, 6510)] = [(7,0),(7,21),(21,14)]
-# initial = [(6510, 3255), (6510, 9765), (9765, 0), (9765, 9765)] #4 anchors 4*4
-#initial = [(0, 12), (12, 12), (12, 24)] #3 anchors 3*3
-#initial = [(0, 2592), (2592, 2592), (2592, 5184)] # tics=2592, anchors=3
-# print(len(positions))
-# drawNetwork([positions[200]], algo_="initial", mode_="show")
-# drawNetwork(neighbor(positions[200]), algo_="n1", mode_="show")
-# into_list = list(itertools.chain(*anchors_list))
-# #drawNetwork(initial, algo_="initial", mode_="show")
-# #into_list = list(itertools.chain(*anchors_list))
-# #drawNetwork(into_list, algo_="nl", mode_="show")
-#initial = [(0, 96), (96, 96), (96, 192)] #tics=96 anchors=3 max_x=192
-
-#[(0, 96), (96, 96), (96, 192)]]#3;96
-#[(0, 96), (96, 0), (96, 96), (192, 96)]#4;96
-#[(0, 0), (0, 96), (0, 192), (96, 96), (192, 96)]#5;96
 
 initial_list = [[(0, 96), (96, 96), (96, 192)],
                 [(0, 96), (96, 0), (96, 96), (192, 96)],
@@ -107,10 +88,7 @@ drawNetwork(optimal_anchors, optimal_areas, algo_="fear_heuristic")
 print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
 print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
-f_res = open('./TXT/fear_heuristic.txt', 'a')
+f_res = open('./TXT/heuristic.txt', 'a')
 f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
 
 f_res.close()
-
-##TODO The initial point is from brute force, I find it by multiplying it with the TICS.
-##TODO I should verify whether the results of the neigbhoor function is reduced to the current TICS

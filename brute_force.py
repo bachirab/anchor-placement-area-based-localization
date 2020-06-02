@@ -16,7 +16,6 @@ args = parser.parse_args()
 max_x = args.max_x
 max_y = args.max_y
 n_points = args.points
-#tics = args.tics
 tics = max_x // (n_points - 1)
 nb_anchors = args.nb_anchors
 
@@ -46,8 +45,8 @@ end = time.time()
 drawNetwork(optimal_anchors, optimal_areas, algo_="brute",max_x_=max_x, max_y_=max_y)
 
 print("**Optimal Anchor Pos.:" + str(optimal_anchors), minAvgRA)
-print('Runinig Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
+print('Running Times : ' + str(round((end - start) / 60.0, 2)) + ' (min.)')
 
-f_res = open('./TXT/brute.txt', 'a')
+f_res = open('./TXT/brutee.txt', 'a')
 f_res.write(str(optimal_anchors)+';'+str(minAvgRA)+';'+str(end - start)+';'+str(nb_anchors)+';'+str(tics)+'\n')
 f_res.close()

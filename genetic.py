@@ -1,7 +1,4 @@
-global NB_ANCHORS
-
 from multiprocessing import Process, Queue, cpu_count
-from sys import stdout
 from random import random
 import time
 from copy import deepcopy
@@ -42,7 +39,7 @@ Genetic algorithm method
 class GA(object):
     """
         Implementation of a genetic algorithm
-        for a permuation problem
+        for a permutation problem
     """
 
     def __init__(self, fitness_func,
@@ -66,6 +63,7 @@ class GA(object):
         self.MutationThreshold = MutationThreshold
         self.archive = []
         self.f_archive = []
+        self.evolution = []
         for i in range(MAX_X // TICS):
             for j in range(MAX_Y // TICS):
                 self.all.append((i, j))
@@ -80,15 +78,12 @@ class GA(object):
         return (child_1, child_2)
 
     def mutation(self, individual):
-        #        new_place = np.random.choice(list( set(range(self.space+1)) - set(individual)))
         new_place = np.random.choice(range(self.space+1)) * self.TICS
         index = np.random.randint(0, self.dim)
         individual[index] = new_place
         return individual
 
     def selectParents(self, fitness_population):
-        # Construct a iterator here
-        # Use Tournament Selection
         while 1:
             parent1 = self.tournament(fitness_population)
             parent2 = self.tournament(fitness_population)
@@ -105,7 +100,7 @@ class GA(object):
         unique = [list(e) for e in unique]
         if len(unique) == len(anchors):
             f_ind = self.fitness_func(anchors)
-            return f_ind[0]  # we just return the average
+            return f_ind[0]
         else:
             return 99999999
 
@@ -115,7 +110,6 @@ class GA(object):
         return [fitness_population[i[1]][1] for i in best]
 
     def update(self, fitness_population_):
-        #        allChildren = self.eletism(0.25, fitness_population)
         fitness_population = deepcopy(fitness_population_)
         allChildren = []
         generator = self.selectParents(fitness_population)
@@ -140,8 +134,7 @@ class GA(object):
             for i in range(len(fitness_population)-len(allChildren)):
                 tmp.append(list(np.random.randint(0, self.space + 1, self.dim) * TICS))
             return allChildren.extend(tmp)
-        # TODO Think about eletism
-        return allChildren[:len(fitness_population)]  # May exceed
+        return allChildren[:len(fitness_population)]
 
     def Work(self, anchors, q):
         f_ind = self.fitness(anchors)
@@ -181,7 +174,6 @@ class GA(object):
         return "\033[92m %d \033[0m" % current
 
     def run(self):
-        self.evolution = []
         duration = 0
         for i in tqdm(np.arange(self.gen)):
             start = time.time()
@@ -210,7 +202,6 @@ def Work(anchors):
     return [avgRA, res, anchors]
 
 
-######### Main ()
 
 ga = GA(
     fitness_func=Work,
@@ -228,7 +219,6 @@ start = time.time()
 optimal_anchors = ga.run()
 end = time.time()
 
-# getting the optimal area and the minavg from optimal anchors
 print(optimal_anchors)
 
 l = getAllSubRegions(optimal_anchors)

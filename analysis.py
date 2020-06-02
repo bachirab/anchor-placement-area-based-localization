@@ -3,12 +3,10 @@ import pandas as pd
 import matplotlib.pylab as plt
 
 b_data = "TXT/brutee.txt"
-fh_data = "TXT/fear_heuristic.txt"
-# h_data = "TXT/heuristic.txt"
+fh_data = "TXT/heuristic.txt"
 g_data = "TXT/genetic.txt"
 pg_data = "TXT/p_genetic.txt"
 ppg_data = "TXT/evolution.txt"
-time_c_data = "TXT/p_genetic2.txt"
 color = ['green', 'blue', 'red']
 
 
