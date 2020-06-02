@@ -232,7 +232,6 @@ ga = GA(
     TICS=tics
 )
 
-# with big space comes big responsabilty ( Mutation problem )
 start = time.time()
 optimal_anchors = ga.run()
 end = time.time()
