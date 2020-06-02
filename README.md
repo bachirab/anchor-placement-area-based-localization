@@ -1,3 +1,4 @@
-# HSL
-MetaLoc
-# anchor-placement-area-based-localization
+# Anchor Placement Area-based Localization
+This code is the implementation of an optimal placement using Genetic algorithm.
+
+
